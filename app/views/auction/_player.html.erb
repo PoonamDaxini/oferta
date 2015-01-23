@@ -1,0 +1,25 @@
+<div class="row" id="player">
+<div class="col-xs-9 ">
+                         <!--a href="/auction/getuser" data-remote="true"><button class="btn btn-success col-xs-9"> Go </button>  
+
+                         </a-->
+                <%= link_to 'Go', auction_getuser_path, remote: true, class:  "btn btn-success col-xs-9" %>
+
+                    </div>
+<div class="col-xs-5" >
+          			<% user_name = @player.email_id.split('@') %>
+          			
+          			<img src="https://tp.internal.directi.com/pics/upload_pic/thumbnail_<%= user_name.first %>.jpg"/>
+          		</div>
+          		<div class="col-xs-4">      
+                         <%= hidden_field_tag :user_id, @player.id %>    		
+          			Name : <%= @player.name %>
+          			<br/>
+          			Skills : <%= @player.skills %>
+          			<br/>
+          			Email : <%= @player.email_id %>
+          			<br/>
+          			Contact : <%= @player.contact %>
+          			<br/>
+          		</div>
+                    </div>

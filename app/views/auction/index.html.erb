@@ -1,0 +1,90 @@
+<div id="main-container" class="container">
+	<div class="row">
+		<div id="sidebar" class="col-xs-3">
+			<table class="table  table-bordered">
+				<tr>	
+					<th rowspan="2">
+						Captain Name 
+					</th>
+					<th colspan="3">
+						Bidding Values
+					</th>
+				</tr>
+				<tr>
+					<th>Available Balance</th>
+					<th>Maximum Bid Value</th>
+          <th>Players in team</th>
+				</tr>
+         	<% @captain.each do |cap| %>
+         		<tr>
+         			<td><%= cap.name %></td>
+         			<td><span id="current_bid_<%= cap.id %>"> 1100</span></td>
+         			<td><span id="max_bid_allowed_<%= cap.id %>">110</span></td>
+              <td><span id="players_<%= cap.id %>">0</span></td>
+         		</tr>
+         	<% end %>
+         	</table>
+        </div>
+        <div id="content" class="col-xs-9" ng-view="">
+          <!--  main content -->
+          	
+               <%= render 'player' %>
+          	
+          	<div class="row">
+          		
+          		<div class="col-xs-3">
+          			<%= collection_select(:user, :user_id, @captain, :id, :name) %>
+      			</div>
+      			<div class="col-xs-3">
+      				<%= text_field_tag :bid_value %>
+      			</div>
+      			<div class="col-xs-3">
+             <%= link_to 'Sold', auction_sold_path, remote: true, class:  "btn btn-primary " , id: "sold"%>
+      			</div>
+          	</div>
+        </div>
+    </div>
+</div>
+<!-- auction_sold_path -->
+<script>
+  $('#sold').click(function(){
+    var user_id = $('#user_id').val();
+    var captain_id = $('#user_user_id').val();
+    var bid_value = $('#bid_value').val();
+    var data_value = {'user_id' : user_id, 'captain_id' : captain_id, 'bid_value' : bid_value};
+    var max_bid_allow = $('#max_bid_allowed_'+ captain_id).text();
+    var current_bid = $('#current_bid_'+ captain_id).text();
+    alert('sold');
+    console.log(data_value);
+    
+    if(bid_value == ''){
+      alert('put bid value');      
+    }else if(bid_value > parseFloat(max_bid_allow)){
+      alert('Exceeds max allowed limit');
+    }else {
+      $.ajax({
+        type: "POST",
+        url: 'auction/sold',
+        data: data_value,
+        success:function(message){
+          console.log('hey done');
+          var ava_bid = parseFloat(current_bid) - bid_value;
+          $('#current_bid_'+ captain_id).text(ava_bid); 
+          var player = parseInt($('#players_'+ captain_id).text()) + 1;
+          console.log(player);
+          $('#players_'+ captain_id).text(player);
+          var total_player_required = 11 - player;
+          var curr_max_allowed = ava_bid / total_player_required ;
+          console.log(curr_max_allowed);
+          $('#max_bid_allowed_'+ captain_id).text(curr_max_allowed);
+
+          $("#player").html("<%= escape_javascript(render 'player') %>");
+
+        },
+        error:function(){
+          alert('Unable to update data');
+        }
+      });
+    }
+  });
+</script>
