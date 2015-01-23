@@ -1,17 +1,22 @@
 <div class="row" id="player">
-<div class="col-xs-9 ">
+<% unless @player.blank? %>
+<div class="col-md-8 ">
                          <!--a href="/auction/getuser" data-remote="true"><button class="btn btn-success col-xs-9"> Go </button>  
 
                          </a-->
-                <%= link_to 'Go', auction_getuser_path, remote: true, class:  "btn btn-success col-xs-9" %>
+
+                <%= link_to 'Go', auction_getuser_path, remote: true, class:  "btn btn-success col-md-12", id: "go" %>
 
                     </div>
-<div class="col-xs-5" >
+
+<div class="col-md-6 row" >
           			<% user_name = @player.email_id.split('@') %>
           			
-          			<img src="https://tp.internal.directi.com/pics/upload_pic/thumbnail_<%= user_name.first %>.jpg"/>
+          			<!--img src="https://tp.internal.directi.com/pics/upload_pic/thumbnail_<%= user_name.first %>.jpg"/-->
+
+                         <img src="https://tp.internal.directi.com/pics/upload_pic/large_<%= user_name.first %>.jpg"/>
           		</div>
-          		<div class="col-xs-4">      
+          		<div class="col-md-5">      
                          <%= hidden_field_tag :user_id, @player.id %>    		
           			Name : <%= @player.name %>
           			<br/>
@@ -23,3 +28,6 @@
           			<br/>
           		</div>
                     </div>
+                    <% else %>
+                    <div> All Players Sold</div>
+                    <% end %>

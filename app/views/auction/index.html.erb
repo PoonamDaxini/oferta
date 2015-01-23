@@ -1,6 +1,6 @@
 <div id="main-container" class="container">
 	<div class="row">
-		<div id="sidebar" class="col-xs-3">
+		<div id="sidebar" class="col-md-4">
 			<table class="table  table-bordered">
 				<tr>	
 					<th rowspan="2">
@@ -25,20 +25,20 @@
          	<% end %>
          	</table>
         </div>
-        <div id="content" class="col-xs-9" ng-view="">
+        <div id="content" class="col-md-8" ng-view="">
           <!--  main content -->
           	
                <%= render 'player' %>
           	
           	<div class="row">
           		
-          		<div class="col-xs-3">
+          		<div class="col-md-3">
           			<%= collection_select(:user, :user_id, @captain, :id, :name) %>
       			</div>
-      			<div class="col-xs-3">
+      			<div class="col-md-3">
       				<%= text_field_tag :bid_value %>
       			</div>
-      			<div class="col-xs-3">
+      			<div class="col-md-3">
              <%= link_to 'Sold', auction_sold_path, remote: true, class:  "btn btn-primary " , id: "sold"%>
       			</div>
           	</div>
@@ -67,18 +67,18 @@
         url: 'auction/sold',
         data: data_value,
         success:function(message){
-          console.log('hey done');
+          
           var ava_bid = parseFloat(current_bid) - bid_value;
           $('#current_bid_'+ captain_id).text(ava_bid); 
           var player = parseInt($('#players_'+ captain_id).text()) + 1;
-          console.log(player);
+          
           $('#players_'+ captain_id).text(player);
           var total_player_required = 11 - player;
           var curr_max_allowed = ava_bid / total_player_required ;
-          console.log(curr_max_allowed);
+          
           $('#max_bid_allowed_'+ captain_id).text(curr_max_allowed);
-
-          $("#player").html("<%= escape_javascript(render 'player') %>");
+          $('#go').trigger('click');
+          $('#bid_value').value = '';
 
         },
         error:function(){
